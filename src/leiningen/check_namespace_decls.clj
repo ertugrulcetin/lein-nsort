@@ -1,4 +1,4 @@
-(ns leiningen.check-ns-decl
+(ns leiningen.check-namespace-decls
   (:require [leiningen.core.eval :as lein]
             [leiningen.core.project :as project]))
 

@@ -1,4 +1,4 @@
-(defproject lein-nsort "0.1.0-SNAPSHOT"
+(defproject lein-nsort "0.1.10-SNAPSHOT"
 
   :description "FIXME: write description"
 
