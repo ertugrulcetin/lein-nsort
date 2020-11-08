@@ -4,6 +4,8 @@ Leiningen plugin that checks that order of namespace declarations for Clojure fi
 
 ## Usage
 
+[![Clojars Project](https://clojars.org/lein-nsort/latest-version.svg)](https://clojars.org/lein-nsort)
+
 ### Adding the dependency to `:plugins`
 
 Add `[lein-nsort "0.1.0"]` into the `:plugins` vector of your
