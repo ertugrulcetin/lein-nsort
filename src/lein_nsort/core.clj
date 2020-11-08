@@ -8,7 +8,7 @@
 (def sort-fns {:asc               {:fn first}
                :desc              {:fn first :comp #(compare %2 %1)}
                :alias-bottom-asc  {:fn (juxt #(* -1 (.indexOf % :as)) first)}
-               :alias-bottom-desc {:fn (juxt (juxt #(.indexOf % :as) first)) :comp #(compare %2 %1)}})
+               :alias-bottom-desc {:fn (juxt #(.indexOf % :as) first) :comp #(compare %2 %1)}})
 
 (def path (s/path (s/codewalker #(and (list? %)
                                       (#{:import :require} (first %))))))
@@ -49,22 +49,27 @@
      ns-decls)))
 
 
-(defn check-namespace-decls [opts]
+(defn nsort [opts]
   (try
-    (let [nses (get-invalid-declarations (or opts {}))]
-      (doseq [[ns* errors] (group-by :ns nses)]
-        (println (format "Invalid namespace declaration: %s\n" ns*))
-        (doseq [err errors]
-          (when (:duplicate-decl? err)
-            (println (format "There is duplicate %s declaration" (:type err))))
-          (let [ns-or-package (if (= :require (:type err)) "Namespaces" "Packages")]
-            (println (format "%s inside %s form should be sorted like this:\n\n%s"
-                             ns-or-package
-                             (:type err)
-                             (with-out-str (pp/pprint (cons (:type err) (:sorted err)))))))))
-      (if (pos? nses)
-        (System/exit 1)
-        (System/exit 0)))
+    (let [start (. System (nanoTime))
+          nses  (get-invalid-declarations (or opts {}))
+          _     (doseq [[ns* errors] (group-by :ns nses)
+                        err errors]
+                  (println (format "--- %s %s form should be sorted like this:\n\n%s"
+                                   ns*
+                                   (:type err)
+                                   (with-out-str (pp/pprint (cons (:type err) (:sorted err))))))
+                  (when (:duplicate-decl? err)
+                    (println (format "There is duplicate %s declaration found\n" (:type err)))))
+          took  (long (/ (double (- (. System (nanoTime)) start)) 1000000.0))]
+      (println "Took:" took "msecs")
+      (if (pos? (count nses))
+        (do
+          (println (count nses) "namespace declaration errors exist")
+          (System/exit 1))
+        (do
+          (println "All namespace declarations are valid.")
+          (System/exit 0))))
     (catch Exception e
-      (println "Error occurred:" (.getMessage e))
+      (pp/pprint e)
       (System/exit 2))))
