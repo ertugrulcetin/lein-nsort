@@ -5,10 +5,17 @@
             [clojure.pprint :as pp]))
 
 
+(defn- get-index-of [ns]
+  (let [idx (.indexOf ns :as)]
+    (if (neg? idx)
+      (.indexOf ns :refer)
+      idx)))
+
+
 (def sort-fns {:asc               {:fn first}
                :desc              {:fn first :comp #(compare %2 %1)}
-               :alias-bottom-asc  {:fn (juxt #(* -1 (.indexOf % :as)) first)}
-               :alias-bottom-desc {:fn (juxt #(.indexOf % :as) first) :comp #(compare %2 %1)}})
+               :alias-bottom-asc  {:fn (juxt #(* -1 (get-index-of %)) first)}
+               :alias-bottom-desc {:fn (juxt #(get-index-of %) first) :comp #(compare %2 %1)}})
 
 (def path (s/path (s/codewalker #(and (list? %)
                                       (#{:import :require} (first %))))))
