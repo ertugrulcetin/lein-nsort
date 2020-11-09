@@ -27,6 +27,22 @@ lein nsort
 This will check `ns` declaration forms for all Clojure source files in
 the `{:nsort {:src-dir "src"}}` of your project (default `./src/`).
 
+### Output
+```clj
+(ns bloom.report.utils.citeproc
+  (:require [clojure.data.json :as json]
+            [bloom.server.config :refer [config]]
+            [clj-http.client :as http]))
+
+;; After running check
+--- bloom.report.utils.citeproc :require form should be sorted like this:
+
+(:require
+ [bloom.server.config :refer [config]]
+ [clj-http.client :as http]
+ [clojure.data.json :as json])
+
+```
 
 ## Configuration (Optional)
 
