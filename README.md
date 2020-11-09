@@ -8,12 +8,12 @@ Leiningen plugin that checks that order of namespace declarations for Clojure fi
 
 ### Adding the dependency to `:plugins`
 
-Add `[lein-nsort "0.1.0"]` into the `:plugins` vector of your
+Add `[lein-nsort "0.1.10"]` into the `:plugins` vector of your
 `project.clj` or `~/.lein/profiles.clj`.
 
 ```clj
 (defproject my-project
-  :plugins [[lein-nsort "0.1.0"]])
+  :plugins [[lein-nsort "0.1.10"]])
 ```
 
 ### Running the checker
