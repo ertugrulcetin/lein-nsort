@@ -1,4 +1,4 @@
-(defproject lein-nsort "0.1.11"
+(defproject lein-nsort "0.1.12"
 
   :description "Leiningen plugin that checks that order of namespace declarations for Clojure files\n\n"
 
@@ -11,6 +11,7 @@
 
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.namespace "1.0.0"]
-                 [com.rpl/specter "1.1.3"]]
+                 [com.rpl/specter "1.1.3"]
+                 [rewrite-clj "0.6.1"]]
 
   :eval-in-leiningen true)

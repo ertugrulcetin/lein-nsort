@@ -8,12 +8,12 @@ Leiningen plugin that checks that order of namespace declarations for Clojure fi
 
 ### Adding the dependency to `:plugins`
 
-Add `[lein-nsort "0.1.11"]` into the `:plugins` vector of your
+Add `[lein-nsort "0.1.12"]` into the `:plugins` vector of your
 `project.clj` or `~/.lein/profiles.clj`.
 
 ```clj
 (defproject my-project
-  :plugins [[lein-nsort "0.1.11"]])
+  :plugins [[lein-nsort "0.1.12"]])
 ```
 
 ### Running the checker
@@ -42,6 +42,15 @@ the `{:nsort {:src-dir "src"}}` of your project (default `./src/`).
  [clj-http.client :as http]
  [clojure.data.json :as json])
 
+```
+
+## Automatically replacing namespace declarations in source files
+```
+lein nsort --replace
+```
+OR
+```
+lein nsort -r
 ```
 
 ## Configuration (Optional)

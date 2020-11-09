@@ -18,9 +18,12 @@
 
 
 (defn nsort
-  [project]
-  (let [project (project/merge-profiles project [(check-namespace-decls-profile project)])]
-   (lein/eval-in-project
-    project
-    `(lein-nsort.core/nsort '~(:nsort project))
-    '(require 'lein-nsort.core))))
+  "Checks namespace decelerations order"
+  ([project]
+   (nsort project nil))
+  ([project subtask]
+   (let [project (project/merge-profiles project [(check-namespace-decls-profile project)])]
+     (lein/eval-in-project
+      project
+      `(lein-nsort.core/nsort '~(:nsort project) ~subtask)
+      '(require 'lein-nsort.core)))))
