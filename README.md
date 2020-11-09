@@ -1,6 +1,6 @@
 # lein-nsort
 
-Leiningen plugin that checks that order of namespace declarations for Clojure files
+Leiningen plugin that checks that order of namespace declarations for Clojure and ClojureScript
 
 ## Usage
 
@@ -8,12 +8,12 @@ Leiningen plugin that checks that order of namespace declarations for Clojure fi
 
 ### Adding the dependency to `:plugins`
 
-Add `[lein-nsort "0.1.13"]` into the `:plugins` vector of your
+Add `[lein-nsort "0.1.14"]` into the `:plugins` vector of your
 `project.clj` or `~/.lein/profiles.clj`.
 
 ```clj
 (defproject my-project
-  :plugins [[lein-nsort "0.1.13"]])
+  :plugins [[lein-nsort "0.1.14"]])
 ```
 
 ### Running the checker
@@ -24,8 +24,8 @@ Run the nsort like this:
 lein nsort
 ```
 
-This will check `ns` declaration forms for all Clojure source files in
-the `{:nsort {:src-dir "src"}}` of your project (default `./src/`).
+This will check `ns` declaration forms for all Clojure and ClojureScript source files in
+the `{:nsort {:source-paths ["src"]}}` of your project (default `./src/`).
 
 ### Output
 ```clj
@@ -59,9 +59,10 @@ Add a `:nsort` key to your `project.clj` to customize the checker.
 
 ```clj
 (defproject my-project
-  :nsort {:src-dir "src" ;;(default)
-          :require :asc ;;(default)
-          :import  :desc})
+  :nsort {:require :asc ;;(default)
+          :import  :desc
+          :source-paths ["src"] ;;(default)
+          })
 ```
 
 There are 4 pre-defined sorting checks for `:require` and 2 for `:import`.

@@ -54,9 +54,15 @@
         (ns-find/find-sources-in-dir dir platform)))
 
 
-(defn- get-invalid-declarations [{:keys [src-dir]
-                                  :or   {src-dir "src"} :as opts}]
-  (let [ns-decls (find-ns-decls-in-dir (io/file src-dir) ns-find/clj)]
+(defn- find-ns-decls [source-paths]
+  (concat
+   (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/clj) source-paths)
+   (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/cljs) source-paths)))
+
+
+(defn- get-invalid-declarations [{:keys [source-paths]
+                                  :or   {source-paths ["src"]} :as opts}]
+  (let [ns-decls (find-ns-decls source-paths)]
     (reduce
      (fn [acc decl]
        (let [{:keys [file ns-decl]} decl
