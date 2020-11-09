@@ -1,4 +1,4 @@
-(defproject lein-nsort "0.1.12"
+(defproject lein-nsort "0.1.13"
 
   :description "Leiningen plugin that checks that order of namespace declarations for Clojure files\n\n"
 

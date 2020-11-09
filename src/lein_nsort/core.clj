@@ -97,7 +97,7 @@
                                 prj-map (z/find-value data z/next 'ns)
                                 req     (z/find-value prj-map z/next (:type err))]
                             (-> req m/up (z/replace (p/parse-string form)) z/root-string)))
-                    (swap! files conj (.getName (:file err)))
+                    (swap! files conj (.getAbsolutePath (:file err)))
                     (catch Exception e
                       (println "Error occurred. Could not update ns: " ns*)
                       (clojure.pprint/pprint e))))
