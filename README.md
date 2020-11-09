@@ -59,9 +59,9 @@ There are 4 pre-defined sorting checks for `:require` and 2 for `:import`.
 Also you can **define** your own sorting functions like:
 ```clj
 {...
-:nsort {:require {:fn   (juxt #(.indexOf % :as) first)}
-         :import  {:fn   first
-                   :comp #(compare %2 %1)}}
+:nsort {:require {:sort-fn (juxt #(.indexOf % :as) first)}
+        :import  {:sort-fn first
+                  :comp    #(compare %2 %1)}} ;; converting to (sort-by first #(compare %2 %1) namespace-decls)
 ...}
 ```
 
