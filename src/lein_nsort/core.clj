@@ -1,12 +1,13 @@
 (ns lein-nsort.core
-  (:require [clojure.java.io :as io]
-            [com.rpl.specter :as s]
-            [clojure.tools.namespace.find :as ns-find]
-            [clojure.tools.namespace.file :as file]
-            [clojure.pprint :as pp]
-            [rewrite-clj.zip :as z]
-            [rewrite-clj.zip.move :as m]
-            [rewrite-clj.parser :as p]))
+  (:require
+   [rewrite-clj.parser :as p]
+   [clojure.java.io :as io]
+   [com.rpl.specter :as s]
+   [clojure.tools.namespace.find :as ns-find]
+   [clojure.tools.namespace.file :as file]
+   [clojure.pprint :as pp]
+   [rewrite-clj.zip :as z]
+   [rewrite-clj.zip.move :as m]))
 
 
 (defn- get-index-of [ns]
@@ -27,7 +28,11 @@
 
 (defn- add-decl-err [acc opts]
   (let [all-nses    (mapcat rest (:nses opts))
-        sorted-nses (sort-by (:key-fn opts) (:comp-fn opts) all-nses)
+        nses-with-sym (filter (comp symbol? first) all-nses)
+        nses-with-str (filter (comp string? first) all-nses)
+        sorted-nses    (concat
+                         (sort-by (:key-fn opts) (:comp-fn opts) nses-with-sym)
+                         (sort-by (:key-fn opts) (:comp-fn opts) nses-with-str))
         nses-count  (count (:nses opts))]
     (if (and (= all-nses sorted-nses) (= nses-count 1))
       acc
@@ -54,15 +59,19 @@
         (ns-find/find-sources-in-dir dir platform)))
 
 
-(defn- find-ns-decls [source-paths]
-  (concat
-   (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/clj) source-paths)
-   (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/cljs) source-paths)))
+(defn- find-ns-decls [source-paths ignored-nses]
+  (let [nses (concat
+               (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/clj) source-paths)
+               (mapcat #(find-ns-decls-in-dir (io/file %) ns-find/cljs) source-paths))
+        ignored-nses (set ignored-nses)]
+    (if (seq ignored-nses)
+      (remove #(-> % :ns-decl second ignored-nses) nses)
+      nses)))
 
 
-(defn- get-invalid-declarations [{:keys [source-paths]
+(defn- get-invalid-declarations [{:keys [source-paths ignored-nses]
                                   :or   {source-paths ["src"]} :as opts}]
-  (let [ns-decls (find-ns-decls source-paths)]
+  (let [ns-decls (find-ns-decls source-paths ignored-nses)]
     (reduce
      (fn [acc decl]
        (let [{:keys [file ns-decl]} decl

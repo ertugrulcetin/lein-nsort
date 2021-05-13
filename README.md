@@ -62,6 +62,7 @@ Add a `:nsort` key to your `project.clj` to customize the checker.
   :nsort {:require :asc ;;(default)
           :import  :desc
           :source-paths ["src"] ;;(default)
+          :ignored-nses [my.app.core]
           })
 ```
 
